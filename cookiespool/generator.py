@@ -3,7 +3,8 @@ from selenium import webdriver
 from selenium.webdriver import DesiredCapabilities
 from cookiespool.config import *
 from cookiespool.db import RedisClient
-from login.weibo.cookies import WeiboCookies
+from login.rmhnair.cookies import RmHnairCookies
+from selenium.webdriver.chrome.options import Options
 
 
 class CookiesGenerator(object):
@@ -20,7 +21,7 @@ class CookiesGenerator(object):
 
     def __del__(self):
         self.close()
-    
+
     def init_browser(self):
         """
         通过browser参数初始化全局浏览器供模拟登录使用
@@ -33,8 +34,10 @@ class CookiesGenerator(object):
             self.browser = webdriver.PhantomJS(desired_capabilities=caps)
             self.browser.set_window_size(1400, 500)
         elif BROWSER_TYPE == 'Chrome':
-            self.browser = webdriver.Chrome()
-    
+            options = Options()
+            options.headless = True
+            self.browser = webdriver.Chrome(executable_path=BROWSER_EXECUTABLE_PATH, chrome_options=options)
+
     def new_cookies(self, username, password):
         """
         新生成Cookies，子类需要重写
@@ -43,7 +46,7 @@ class CookiesGenerator(object):
         :return:
         """
         raise NotImplementedError
-    
+
     def process_cookies(self, cookies):
         """
         处理Cookies
@@ -54,7 +57,7 @@ class CookiesGenerator(object):
         for cookie in cookies:
             dict[cookie['name']] = cookie['value']
         return dict
-    
+
     def run(self):
         """
         运行, 得到所有账户, 然后顺次模拟登录
@@ -62,7 +65,7 @@ class CookiesGenerator(object):
         """
         accounts_usernames = self.accounts_db.usernames()
         cookies_usernames = self.cookies_db.usernames()
-        
+
         for username in accounts_usernames:
             if not username in cookies_usernames:
                 password = self.accounts_db.get(username)
@@ -83,7 +86,7 @@ class CookiesGenerator(object):
                     print(result.get('content'))
         else:
             print('所有账号都已经成功获取Cookies')
-    
+
     def close(self):
         """
         关闭
@@ -91,14 +94,13 @@ class CookiesGenerator(object):
         """
         try:
             print('Closing Browser')
-            self.browser.close()
-            del self.browser
-        except TypeError:
+            self.browser.quit()
+        except AttributeError:
             print('Browser not opened')
 
 
-class WeiboCookiesGenerator(CookiesGenerator):
-    def __init__(self, website='weibo'):
+class RmHnairCookiesGenerator(CookiesGenerator):
+    def __init__(self, website='rmhnair'):
         """
         初始化操作
         :param website: 站点名称
@@ -106,7 +108,7 @@ class WeiboCookiesGenerator(CookiesGenerator):
         """
         CookiesGenerator.__init__(self, website)
         self.website = website
-    
+
     def new_cookies(self, username, password):
         """
         生成Cookies
@@ -114,7 +116,7 @@ class WeiboCookiesGenerator(CookiesGenerator):
         :param password: 密码
         :return: 用户名和Cookies
         """
-        return WeiboCookies(username, password, self.browser).main()
+        return RmHnairCookies(username, password, self.browser).main()
 
 
 if __name__ == '__main__':
