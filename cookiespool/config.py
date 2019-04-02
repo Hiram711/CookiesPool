@@ -1,15 +1,15 @@
 # Redis数据库地址
-REDIS_HOST = '10.42.1.74'
+REDIS_HOST = 'fervent_snyder'
 
 # Redis端口
-REDIS_PORT = 6179
+REDIS_PORT = 6379
 
 # Redis密码，如无填None
-REDIS_PASSWORD = 'foobared'
+REDIS_PASSWORD = None
 
 # 产生器使用的浏览器
 BROWSER_TYPE = 'Chrome'
-BROWSER_EXECUTABLE_PATH = 'D:\chromedriver_win32\chromedriver.exe'
+# BROWSER_EXECUTABLE_PATH = 'D:\chromedriver_win32\chromedriver.exe'
 
 # 产生器类，如扩展其他站点，请在此配置
 GENERATOR_MAP = {
@@ -33,4 +33,4 @@ GENERATOR_PROCESS = True
 # 验证器开关，循环检测数据库中Cookies是否可用，不可用删除
 VALID_PROCESS = True
 # API接口服务
-API_PROCESS = True
+API_PROCESS = False

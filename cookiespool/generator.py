@@ -27,16 +27,11 @@ class CookiesGenerator(object):
         通过browser参数初始化全局浏览器供模拟登录使用
         :return:
         """
-        if BROWSER_TYPE == 'PhantomJS':
-            caps = DesiredCapabilities.PHANTOMJS
-            caps[
-                "phantomjs.page.settings.userAgent"] = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'
-            self.browser = webdriver.PhantomJS(desired_capabilities=caps)
-            self.browser.set_window_size(1400, 500)
-        elif BROWSER_TYPE == 'Chrome':
-            options = Options()
-            options.headless = True
-            self.browser = webdriver.Chrome(executable_path=BROWSER_EXECUTABLE_PATH, chrome_options=options)
+        chrome_options = Options()
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument('--headless')
+        chrome_options.add_argument('--disable-gpu')
+        self.browser = webdriver.Chrome(chrome_options=chrome_options)
 
     def new_cookies(self, username, password):
         """
@@ -120,5 +115,5 @@ class RmHnairCookiesGenerator(CookiesGenerator):
 
 
 if __name__ == '__main__':
-    generator = WeiboCookiesGenerator()
+    generator = RmHnairCookiesGenerator()
     generator.run()
