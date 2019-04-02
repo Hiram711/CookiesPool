@@ -3,7 +3,9 @@ MAINTAINER Hiram <jie.zhang8@luckyair.net>
 
 RUN mkdir /myapp
 WORKDIR /myapp
-COPY ../CookiesPool /myapp
+COPY ./* /myapp
+
+
 
 # install tesseract
 RUN apt-get update
