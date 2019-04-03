@@ -28,10 +28,8 @@ WORKDIR /myapp
 COPY entrypoint.sh /myapp/
 COPY requirements.txt /myapp/
 COPY run.py /myapp/
-COPY cookiespool /myapp/cookiepool/
+COPY cookiespool /myapp/cookiespool/
 COPY login /myapp/login/
-
-
 
 RUN pip install -r requirements.txt && pip install uwsgi
 RUN chmod +x entrypoint.sh
