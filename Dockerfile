@@ -25,10 +25,17 @@ RUN pip install selenium==3.8.0
 
 RUN mkdir /myapp
 WORKDIR /myapp
-COPY ./* /myapp/
+COPY entrypoint.sh /myapp/
+COPY requirements.txt /myapp/
+COPY run.py /myapp/
+COPY cookiespool /myapp/cookiepool/
+COPY login /myapp/login/
+
+
 
 RUN pip install -r requirements.txt && pip install uwsgi
+RUN chmod +x entrypoint.sh
 
 EXPOSE 5000
 
-CMD ["entrypoint.sh"]
+CMD ["/myapp/entrypoint.sh"]
