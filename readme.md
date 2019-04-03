@@ -17,6 +17,6 @@ docker build  . -t cookiepool:generate
 
 3. Run
 ```bash
-docker run -d --name cookiepool_server --link your-redis-container cookiepool:generate sh -c 'uwsgi --http :5000 --wsgi-file cookiespool/api.py --callable app  --processes 4 --threads 2'
+docker run -d -p 5010:5000 --name cookiepool_server --link your-redis-container cookiepool:generate sh -c 'uwsgi --http :5000 --wsgi-file cookiespool/api.py --callable app  --processes 4 --threads 2'
 docker run -d --name cookiepool_generator --link your-redis-container cookiepool:generate
 ```
